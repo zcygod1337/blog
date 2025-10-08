@@ -3,3 +3,4 @@
 
 - [崩掉教师端极域](https://zcygod.top/blog/2025_9_27_1)
 
+- [并查集](https://zcygod.top/blog/2025_10_8_1)
