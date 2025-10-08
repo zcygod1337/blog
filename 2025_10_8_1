@@ -1,0 +1,101 @@
+# 并查集 
+
+Luogu OJ P3367 【模板】并查集题解
+> 并查集被很多OIer认为是最简洁而优雅的数据结构之一，主要用于解决一些元素分组的问题。它管理一系列不相交的集合，并支持合并和查询
+
+
+思路:我们可以建一颗树，
+
+- 查询就搜索其祖宗节点即可
+
+- 合并就可以把祖宗节点链接到一起（这样祖宗节点就一样了）
+
+
+'''cpp
+#include<bits/stdc++.h>
+
+/*
+	Author:zcygod 
+	并查集模版 2025年10月8日16:18:492 
+	首先建树  op==2找根（看看根是否是同一个）。op==1 合并就把树加到自己上边 
+*/
+
+
+const int SIZE=2e5+10;
+int n,m,x,y,op,treex[SIZE];
+//这里的treex其实相当于记忆化搜根 
+namespace fastio{
+    int read(){int f=1,a=0;char c=getchar();while(c<'0'||c>'9'){if(c=='-') f=-1;c=getchar();}while(c>='0'&&c<='9'){a=((a<<1)+(a<<3))+(c-'0');c=getchar();}return f*a;}
+    void write(int n){if(n<0) {putchar('-');n=-n;}if(n>9) write(n/10);putchar(n%10+'0');}
+};
+namespace tree{
+	void init(int n){
+		for (int i=1;i<=n;i++) {
+	        treex[i] = i;
+	    }
+	    //初始化，确保每个节点都有值 
+	}
+	int find(int x){
+		if(x<1||x>n)return -1;//越界检查 
+		//找爹
+		if(treex[x]==x){
+			return x;//自己就是爹 
+		}else{
+			return treex[x]=find(treex[x]);//爬树 （记忆化，不加会超时 
+		}
+	}
+	void join(int x,int y){
+		int xroot=find(x);
+		int yroot=find(y);
+		if(xroot!=-1&&yroot!=-1/*越界检查（不加会莫名RE???）*/&&xroot!=yroot){
+			treex[xroot] = yroot;
+		}
+		/*
+			这里演示的是把 y架在 x上，
+			其实把y架在x上也可，及把这行替换成 tree[y]=x 
+		*/
+		
+		 
+		//把树架上，即可合并树
+		
+		/*
+		原因:并查集可以用一个爹元素（祖宗节点）代表这个元素所属集，这里相当于是把集合的祖宗节点上再架一层集y，这样祖宗节点就变成了y的祖宗节点 
+		
+		*/ 
+	}
+	
+};
+
+using namespace std;
+using namespace fastio;
+using namespace tree;
+
+int main(){
+	n=read();
+	m=read();
+	init(n); 
+	for(int i=1;i<=m;i++){
+		op=read();
+		x=read();
+		y=read();
+		if(x<1||x>n||y<1||y>n){
+			if(op==2) puts("N");
+			continue;
+		}//越界处理 
+		if(op==1){
+			join(x,y);
+		}else{
+			int xroot=find(x);
+			int yroot=find(y);
+			
+			if(xroot==yroot&&xroot!=-1&&yroot!=-1) puts("Y");
+			/*
+				这里只需要找元素的祖宗节点即可
+	 			 ||并查集可以用一个爹元素（祖宗节点）代表这个元素所属集，而只需要找到祖宗节点，就可以找到这个元素所属集合 
+			*/
+			else puts("N");
+		}
+	}
+	return 0;
+}
+'''
